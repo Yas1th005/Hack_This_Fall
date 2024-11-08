@@ -1,0 +1,33 @@
+.simulation-container {
+    position: relative;
+    height: 200px;
+    background: #000;
+  }
+  
+  .earth, .destination, .star {
+    position: absolute;
+    font-size: 2rem;
+  }
+  
+  .earth { left: 0; }
+  .destination { right: 0; }
+  .star {
+    color: yellow;
+    animation: starGlow 1.5s ease-in-out infinite;
+  }
+  
+  .signal {
+    position: absolute;
+    top: 50%;
+    width: 10px;
+    height: 10px;
+    background: lightgreen;
+    border-radius: 50%;
+    transition: background 0.3s;
+  }
+  
+  @keyframes starGlow {
+    0%, 100% { opacity: 0.5; }
+    50% { opacity: 1; }
+  }
+  
