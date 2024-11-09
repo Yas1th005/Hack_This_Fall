@@ -1,17 +1,22 @@
 import React from 'react'
 
-export default function NavBar() {
+export default function NavBar({onSelect}) {
+
+  const handleInput=(value)=>{
+    onSelect(value)
+  }
+
   return (
     <div>
  
 <div class="input">
-  <button class="value">
+  <button class="value" onClick={()=>handleInput("Text")}>
     Text
   </button>
-  <button class="value">
+  <button class="value" onClick={()=>handleInput("Image")}>
     Image
   </button>
-  <button class="value">
+  <button class="value" onClick={()=>handleInput("Binary")}>
     Binary Data
   </button>
 </div>

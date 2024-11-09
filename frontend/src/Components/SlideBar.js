@@ -1,12 +1,15 @@
 import React, { useState } from 'react';
 
-const SliderBar = () => {
+const SliderBar = ({onSelect}) => {
   const [value, setValue] = useState(50); // Default value is 50%
 
   // Handle slider change
   const handleChange = (e) => {
     setValue(e.target.value);
+    onSelect(e.target.value);
   };
+
+
 
   return (
     <div className="grid grid-cols-3 gap-3 items-center justify-center bg-black text-white">

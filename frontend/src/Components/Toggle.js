@@ -5,7 +5,7 @@ function Toggle({ onToggle }) {
 
   const handleToggle = () => {
     setIsChecked(!isChecked);
-    if (onToggle) onToggle(!isChecked); // Call the onToggle function if provided
+    onToggle(isChecked); // Call the onToggle function if provided
   };
 
   return (

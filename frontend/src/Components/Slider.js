@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
 
-function Slider() {
+function Slider({onSelect}) {
   const [value, setValue] = useState(0);
 
   const handleChange = (e) => {
     setValue(Number(e.target.value));
+    onSelect(Number(e.target.value))
   };
 
   return (

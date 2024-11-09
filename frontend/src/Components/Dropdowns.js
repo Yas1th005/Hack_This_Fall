@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
 
-const Dropdowns = (props) => {
+const Dropdowns = ({ name, onSelect }) => {
   const [selected, setSelected] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleSelect = (value) => {
-    setSelected(value);
+  const handleSelect = (option) => {
+    setSelected(option.label);
     setIsOpen(false);
+    onSelect(option.label); // Pass the label to the parent
   };
 
   const options = [
@@ -21,7 +22,7 @@ const Dropdowns = (props) => {
         className="bg-gray-800 text-white p-2 rounded cursor-pointer flex justify-between items-center"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span>{selected ? options.find(option => option.value === selected)?.label : props.name}</span>
+        <span>{selected || name}</span>
         <i className={`ml-2 transform transition-transform ${isOpen ? 'rotate-180' : 'rotate-0'}`}>
           ▼
         </i>
@@ -34,7 +35,7 @@ const Dropdowns = (props) => {
             <div
               key={option.value}
               className="p-3 hover:bg-gray-700 cursor-pointer"
-              onClick={() => handleSelect(option.value)}
+              onClick={() => handleSelect(option)}
             >
               {option.label}
             </div>
