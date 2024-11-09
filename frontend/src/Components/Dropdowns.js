@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 
-const Dropdowns = () => {
+const Dropdowns = (props) => {
   const [selected, setSelected] = useState('');
   const [isOpen, setIsOpen] = useState(false);
 
@@ -21,7 +21,7 @@ const Dropdowns = () => {
         className="bg-gray-800 text-white p-2 rounded cursor-pointer flex justify-between items-center"
         onClick={() => setIsOpen(!isOpen)}
       >
-        <span>{selected ? options.find(option => option.value === selected)?.label : 'Gender'}</span>
+        <span>{selected ? options.find(option => option.value === selected)?.label : props.name}</span>
         <i className={`ml-2 transform transition-transform ${isOpen ? 'rotate-180' : 'rotate-0'}`}>
           ▼
         </i>
