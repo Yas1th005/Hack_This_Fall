@@ -2,6 +2,7 @@
 // import { Raycast, Vercel, Retool, Remote, Arc } from "@/components/Logo"
 import Button from "../Components/Button"
 import { Sparkles } from "./Sparkles"
+import { Link } from 'react-router-dom';
 
 export default function LandingPage() {
   return (
@@ -37,7 +38,8 @@ export default function LandingPage() {
       <p className="text-center text-white">Can a signal truly survive the journey across light-years without losing its essence?</p>
       <br/>
       <div className="flex justify-center">
-      <Button/>
+      <Link to="/simulation"><Button/></Link>
+      
       </div>
 
 

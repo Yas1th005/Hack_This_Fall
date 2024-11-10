@@ -1,13 +1,36 @@
 import React from 'react';
 import ReactDOM from 'react-dom/client';
 import './index.css';
-import App from './App';
 import reportWebVitals from './reportWebVitals';
+import { RouterProvider } from 'react-router-dom';
+import { createBrowserRouter } from 'react-router-dom';
+import LandingPage from './Pages/LandingPage';
+import SpaceBackground from './Pages/Space';
+import PlanetSignalSimulation from './Pages/SignalSimulation';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
+
+let allRoutes=createBrowserRouter(
+  [
+    {
+      path:"/",
+      element:<LandingPage/>
+    },
+    {
+      path:"simulation",
+      element:<SpaceBackground/>
+    },
+    {
+      path:"abc",
+      element:<PlanetSignalSimulation/>
+    }
+  ]
+)
+
+
 root.render(
   <React.StrictMode>
-    <App />
+    <RouterProvider router={allRoutes}/>
   </React.StrictMode>
 );
 

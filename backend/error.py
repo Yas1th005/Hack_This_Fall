@@ -8,6 +8,9 @@ app = Flask(__name__)
 CORS(app)
 
 
+import numpy as np
+import random
+
 def string_to_3d_matrix(binary_string, dim_size=2):
     cube_size = dim_size**3
     padded_length = ((len(binary_string) + cube_size - 1) // cube_size) * cube_size
@@ -29,7 +32,6 @@ def calculate_checksums(matrix):
     return xy_sums, xz_sums, yz_sums
 
 def introduce_random_errors(matrix, error_percentage):
-    """Introduce random bit flips."""
     dim_size = matrix.shape[0]
     total_bits = dim_size**3
     num_errors = int(total_bits * error_percentage / 100)
@@ -42,7 +44,6 @@ def introduce_random_errors(matrix, error_percentage):
     return corrupted_matrix
 
 def introduce_clustered_errors(matrix, clusters=1):
-    """Introduce errors in clusters (adjacent bits)."""
     dim_size = matrix.shape[0]
     corrupted_matrix = matrix.copy()
     for _ in range(clusters):
@@ -56,7 +57,6 @@ def introduce_clustered_errors(matrix, clusters=1):
     return corrupted_matrix
 
 def introduce_plane_errors(matrix):
-    """Introduce errors in entire planes (rows, columns, or depth)."""
     dim_size = matrix.shape[0]
     corrupted_matrix = matrix.copy()
     plane = random.choice(['xy', 'xz', 'yz'])
@@ -70,7 +70,6 @@ def introduce_plane_errors(matrix):
     return corrupted_matrix
 
 def detect_and_recover(corrupted_matrix, original_checksums, method="Checksum", max_iterations=3):
-    """Detect and correct errors using different methods."""
     xy_sums_orig, xz_sums_orig, yz_sums_orig = original_checksums
     dim_size = corrupted_matrix.shape[0]
     recovered_matrix = corrupted_matrix.copy()
@@ -151,6 +150,7 @@ def ERRORdet(original_binary, error_percentage, clusters=1):
     return result
 
 
+# ERRORdet("10101011",50,2)
 
 @app.route('/error', methods=['POST'])
 def process_request():
@@ -158,13 +158,13 @@ def process_request():
     if not data or 'inputValue' not in data:
         return jsonify({'error': 'Invalid input'}), 400
 
-    input_value = data['inputValue']
+    input_value = data.get("inputValue")
 
     # Call your function and get the result
-    result = ERRORdet(input_value[0],input_value[1],input_value[2])  
+    result = ERRORdet(input_value,50,2)  
 
     # Send the result back to the React frontend in JSON format
     return jsonify({'result': result})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=True,port=5001)

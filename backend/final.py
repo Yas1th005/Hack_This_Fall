@@ -70,7 +70,25 @@ def generate_interference_graph(interference_zones, signal_loss_per_zone):
     
     # Create the bar plot with improved aesthetics
     fig, ax = plt.subplots(figsize=(8, 5))
-    ax.bar(interference_zones, signal_loss_per_zone, color='#FF6F61', edgecolor='white')
+    answer=[]
+    ans=[]
+    c=0
+    for i in interference_zones:
+        if(i and c==0):
+            answer.append("Sun")
+            ans.append(30)
+        elif(i and c==1):
+            answer.append("ISM") 
+            ans.append(20)   
+        elif(i and c==2):
+            answer.append("Magnetic Field") 
+            ans.append(15)   
+        elif(i and c==3):
+            answer.append("Quantum Noise")   
+            ans.append(10) 
+        c=c+1    
+    print(answer)
+    ax.bar(answer, ans, color='#FF6F61', edgecolor='white')
 
     # Adding labels and title with modern styling
     ax.set_xlabel("Interference Zone", color="white", fontsize=12)
@@ -102,7 +120,7 @@ def interference_graph():
     Expects JSON input with 'interference_zones' and 'signal_loss_per_zone'.
     """
     data = request.json
-    interference_zones = data.get("interference_zones", ['Star', 'Asteroid Field', 'Nebula'])
+    interference_zones = data.get("interference_zones", ['Star', 'ISM', 'Quantum Noise'])
     signal_loss_per_zone = data.get("signal_loss_per_zone", [20, 10, 15])
 
     # Generate the graph using the received inputs

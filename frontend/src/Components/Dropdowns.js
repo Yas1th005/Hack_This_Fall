@@ -11,8 +11,14 @@ const Dropdowns = ({ name, onSelect }) => {
   };
 
   const options = [
-    { value: '1', label: 'Male' },
-    { value: '0', label: 'Female' },
+    { value: '1', label: 'Mercury' },
+    { value: '2', label: 'Venus' },
+    { value: '3', label: 'Earth' },
+    { value: '4', label: 'Mars' },
+    { value: '5', label: 'Jupiter' },
+    { value: '6', label: 'Saturn' },
+    { value: '7', label: 'Uranus' },
+    { value: '8', label: 'Neptune' }
   ];
 
   return (

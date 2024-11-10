@@ -11,18 +11,18 @@ const PlanetSignalSimulation = () => {
         // Scene setup
         const scene = new THREE.Scene();
         const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
-        camera.position.z = 12;
+        camera.position.z = 20;
 
         const renderer = new THREE.WebGLRenderer({ antialias: true });
         renderer.setSize(window.innerWidth, window.innerHeight);
         renderer.setClearColor(0x000000);
         mountRef.current.appendChild(renderer.domElement);
 
-        // Controls for orbiting
+        // Orbit controls
         const controls = new OrbitControls(camera, renderer.domElement);
         controls.enableDamping = true;
 
-        // Function to create celestial bodies
+        // Create celestial bodies
         const createSphere = (position, color, size) => {
             const geometry = new THREE.SphereGeometry(size, 32, 32);
             const material = new THREE.MeshBasicMaterial({ color });
@@ -32,23 +32,29 @@ const PlanetSignalSimulation = () => {
             return sphere;
         };
 
-        // Planets and celestial objects
-        const earth = createSphere([-8, 0, 0], 0x1e90ff, 0.5);
-        const sun = createSphere([-2, 2, 0], 0xffd700, 1);
-        const jupiter = createSphere([7, -3, 0], 0xff6347, 0.7);
+        const earth = createSphere([-12, 0, 0], 0x1e90ff, 0.6);
+        const sun = createSphere([0, 0, 0], 0xffd700, 1.5); // Sun at the center
+        const jupiter = createSphere([12, 0, 0], 0xff6347, 1);
 
-        // Asteroids
-        const asteroid1 = createSphere([0, 4, -1], 0x808080, 0.3);
-        const asteroid2 = createSphere([3, -2, 0], 0x606060, 0.3);
+        // Create stars
+        const createStars = () => {
+            for (let i = 0; i < 100; i++) {
+                createSphere(
+                    [Math.random() * 30 - 15, Math.random() * 20 - 10, Math.random() * 5 - 2.5],
+                    0xffffff,
+                    0.1
+                );
+            }
+        };
+        createStars();
 
-        // Create the signal path with a curve around the sun
+        // Create the signal path, passing through the Sun
         const signalPath = new THREE.CatmullRomCurve3([
-            new THREE.Vector3(-8, 0, 0), // Earth
-            new THREE.Vector3(-5, 1, 0), // Curve to avoid the Sun
-            new THREE.Vector3(-3, 3, 0),
-            new THREE.Vector3(0, 2, 0),
-            new THREE.Vector3(4, 0, 0),
-            new THREE.Vector3(7, -3, 0)  // Jupiter
+            new THREE.Vector3(-12, 0, 0), // Earth
+            new THREE.Vector3(-6, 1, 0),  // Curve point before the Sun
+            new THREE.Vector3(0, 0, 0),   // Passing through the Sun
+            new THREE.Vector3(6, -1, 0),  // Curve point after the Sun
+            new THREE.Vector3(12, 0, 0)   // Jupiter
         ]);
 
         // Line geometry for the signal
@@ -57,20 +63,20 @@ const PlanetSignalSimulation = () => {
         const signalLine = new THREE.Line(lineGeometry, lineMaterial);
         scene.add(signalLine);
 
-        // Create the moving dot for the signal
-        const dotGeometry = new THREE.SphereGeometry(0.1, 16, 16);
+        // Signal dot
+        const dotGeometry = new THREE.SphereGeometry(0.2, 16, 16);
         const dotMaterial = new THREE.MeshBasicMaterial({ color: 0x00ff00 });
         const signalDot = new THREE.Mesh(dotGeometry, dotMaterial);
         scene.add(signalDot);
 
-        // EM wave effect on the Sun
-        const emWaveGeometry = new THREE.RingGeometry(1.2, 1.5, 32);
-        const emWaveMaterial = new THREE.MeshBasicMaterial({ color: 0xff4500, side: THREE.DoubleSide });
-        const emWave = new THREE.Mesh(emWaveGeometry, emWaveMaterial);
-        emWave.position.set(sun.position.x, sun.position.y, sun.position.z);
-        emWave.rotation.x = Math.PI / 2;
-        scene.add(emWave);
-        emWave.visible = false;
+        // Sun interference effect
+        const pulseEffect = new THREE.RingGeometry(1.8, 2, 32);
+        const pulseMaterial = new THREE.MeshBasicMaterial({ color: 0xff4500, side: THREE.DoubleSide });
+        const pulse = new THREE.Mesh(pulseEffect, pulseMaterial);
+        pulse.position.set(sun.position.x, sun.position.y, sun.position.z);
+        pulse.rotation.x = Math.PI / 2;
+        scene.add(pulse);
+        pulse.visible = false;
 
         // Resize handling
         const handleResize = () => {
@@ -82,10 +88,12 @@ const PlanetSignalSimulation = () => {
 
         // Animation variables
         let t = 0;
+        let signalStrength = 100;
+
         const animateSignal = () => {
             if (!animationStarted) return;
 
-            t += 0.002;
+            t += 0.001; // Slow down the animation
             if (t > 1) t = 1;
 
             const point = signalPath.getPointAt(t);
@@ -93,16 +101,21 @@ const PlanetSignalSimulation = () => {
                 lineGeometry.setFromPoints([signalPath.getPointAt(0), point]);
                 signalDot.position.copy(point);
 
-                // Detect proximity to the Sun and show interference
+                // Gradually change color as signal travels
+                const colorValue = 0x00ff00 - Math.floor(t * 0x00ff00);
+                dotMaterial.color.setHex(colorValue);
+                lineMaterial.color.setHex(colorValue);
+
+                // Detect proximity to Sun for interference
                 if (point.distanceTo(sun.position) < 2) {
-                    emWave.visible = true;
-                    lineMaterial.color.setHex(0xff0000); // Change line color to red due to interference
+                    pulse.visible = true;
+                    lineMaterial.color.setHex(0xff0000);
+                    signalStrength -= 0.8; // Signal weakens more due to interference
                 } else {
-                    emWave.visible = false;
-                    lineMaterial.color.setHex(0x00ff00); // Normal signal color
+                    pulse.visible = false;
                 }
 
-                // Update info box position
+                // Update info box
                 const screenPosition = point.clone().project(camera);
                 const x = (screenPosition.x * 0.5 + 0.5) * window.innerWidth;
                 const y = (screenPosition.y * -0.5 + 0.5) * window.innerHeight;
@@ -110,11 +123,7 @@ const PlanetSignalSimulation = () => {
                     visible: true,
                     x,
                     y,
-                    text: point.distanceTo(jupiter.position) < 0.5
-                        ? 'Signal reached Jupiter!'
-                        : point.distanceTo(sun.position) < 2
-                            ? 'Interference detected!'
-                            : 'Signal transmitting...'
+                    text: `Signal Strength: ${signalStrength.toFixed(2)}%`
                 });
             }
 
@@ -123,9 +132,9 @@ const PlanetSignalSimulation = () => {
             if (t < 1) requestAnimationFrame(animateSignal);
         };
 
-        // Start the animation
         if (animationStarted) {
             t = 0;
+            signalStrength = 100;
             animateSignal();
         }
 
@@ -150,7 +159,7 @@ const PlanetSignalSimulation = () => {
                 onClick={handleButtonClick}
                 className="bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-8 rounded mt-4"
             >
-                {animationStarted ? 'End Simulation' : 'Start Simulation'}
+                {animationStarted ? 'End Simulation' : 'View Simulation'}
             </button>
 
             <div ref={mountRef} className="w-full h-[600px] mt-4" />

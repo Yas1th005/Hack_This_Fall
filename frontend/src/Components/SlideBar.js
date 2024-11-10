@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 
 const SliderBar = ({onSelect}) => {
-  const [value, setValue] = useState(50); // Default value is 50%
+  const [value, setValue] = useState(627.47); // Default value is 50%
 
   // Handle slider change
   const handleChange = (e) => {
@@ -20,12 +20,12 @@ const SliderBar = ({onSelect}) => {
       <input
         type="range"
         min="0"
-        max="100"
+        max="1254.94"
         value={value}
         onChange={handleChange}
         className="w-50 h-2 bg-gray-700 rounded-lg appearance-none cursor-pointer focus:outline-none focus:ring-2 focus:ring-indigo-500"
       />
-      <p className="font-sourGummy text-lg mb-4">{value}%</p>
+      {/* <p className="font-sourGummy text-lg mb-4">{value}</p> */}
     </div>
   );
 };

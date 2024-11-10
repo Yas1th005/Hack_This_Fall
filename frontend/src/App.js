@@ -7,19 +7,11 @@ import LandingPage from './Pages/LandingPage';
 import PlanetSignalSimulation from './Pages/SignalSimulation';
 import SignalSimulation from './Pages/SignalSimulation';
 import SpaceBackground from './Pages/Space';
+import React from 'react';
+import { createBrowserRouter } from 'react-router-dom';
 
 function App() {
-
-  const data = {
-    Original: "01011111",
-    Corrupted: "11010100",
-    Results: {
-      Checksum: { Recovered: "01110001", "Recovery Rate (%)": "50.00", "Corrections Made": 12 },
-      "Majority Voting": { Recovered: "01110001", "Recovery Rate (%)": "50.00", "Corrections Made": 12 },
-      "Iterative Refinement": { Recovered: "01110001", "Recovery Rate (%)": "50.00", "Corrections Made": 12 }
-    }
-  };
-
+  
 
   return (
     // <LandingPage/>
@@ -30,7 +22,12 @@ function App() {
     // <div style={{ backgroundColor: "#000000", minHeight: "100vh", display: "flex", justifyContent: "center", alignItems: "center" }}>
     //   <DataDisplay data={data} />
     // </div>
-    <SpaceBackground/>
+    // <SpaceBackground/>
+    <div></div>
+
+
+
+
   );
 }
 

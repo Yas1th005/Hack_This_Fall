@@ -5,12 +5,12 @@ import 'swiper/css/navigation';
 import 'swiper/css/pagination';
 import { Navigation, Pagination } from 'swiper/modules';
 
-function InterfereSignal() {
+function InterfereSignal(props) {
     const [graph, setGraph] = useState('');
     const [graph1, setGraph1] = useState('');
     const [graph2, setGraph2] = useState('');
     const [graph3, setGraph3] = useState('');
-
+    console.log(props)
     useEffect(() => {
         async function fetchGraph() {
             const response = await fetch("http://localhost:5000/api/graph/signal_integrity", {
@@ -19,8 +19,8 @@ function InterfereSignal() {
                     "Content-Type": "application/json",
                 },
                 body: JSON.stringify({
-                  max_distance: 15,
-                  initial_signal_strength: 120,
+                  max_distance: props.distance,
+                  initial_signal_strength: props.errorLevel,
                 }),
             });
             const data = await response.json();
@@ -39,8 +39,8 @@ function InterfereSignal() {
                   "Content-Type": "application/json",
               },
               body: JSON.stringify({
-                interference_zones: ['Star', 'Asteroid Field', 'Nebula', 'Black Hole'],
-                signal_loss_per_zone: [20, 10, 15, 30],
+                interference_zones: [props.toggle1,props.toggle2,props.toggle3,props.toggle4],
+                signal_loss_per_zone: [40, 10, 25, 70],
               }),
           });
           const data = await response.json();
@@ -61,9 +61,7 @@ function InterfereSignal() {
             body: JSON.stringify({
               distances: [1, 3, 5, 7, 9],
               transmission_speeds: {
-                  Binary: [50, 40, 30, 20, 10],
-                  Image: [40, 30, 25, 15, 5],
-                  Text: [60, 50, 45, 35, 25]
+                  Binary: [50, 40, 30, 20, 10]
               }
             }),
         });
