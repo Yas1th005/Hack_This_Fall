@@ -27,7 +27,17 @@ The project uses real-time ephemeris data from the *Jet Propulsion Laboratory (J
   - *k*: Coefficients representing the sensitivity of the error probability to each parameter.
   - *C*: Constants to normalize the values of each parameter for better scalability and accuracy.
 
- 
+
+![1](https://github.com/user-attachments/assets/4f71aae4-e4a0-414a-963b-20365f59069c)
+
+![2](https://github.com/user-attachments/assets/c183b63d-36af-4832-bdd1-9639ba2d703b)
+
+![3](https://github.com/user-attachments/assets/4d9710e7-30f6-44ff-bf33-2b4dfce79411)
+
+![4](https://github.com/user-attachments/assets/f9f43ae2-0e24-4fbf-80ef-24db8058c639)
+
+
+
 ###  Explanation of Terms:
   - The exponential term for APmag reflects how increased brightness reduces visibility and increases error likelihood.
   - The ratio for S-brt shows that higher surface brightness directly correlates with increased noise.
@@ -117,4 +127,8 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
+
 The ephemeris data is sourced from NASA’s Jet Propulsion Laboratory (JPL) Horizons system.
+
+
+
